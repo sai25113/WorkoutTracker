@@ -1,0 +1,30 @@
+{
+  "name": "homegym-client",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HomeGym React frontend",
+  "scripts": {
+    "start": "webpack serve --mode development --open",
+    "build": "webpack --mode production"
+  },
+  "dependencies": {
+    "axios": "*",
+    "chart.js": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-chartjs-2": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "@babel/preset-react": "*",
+    "babel-loader": "*",
+    "css-loader": "*",
+    "html-webpack-plugin": "*",
+    "style-loader": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*"
+  }
+}
+

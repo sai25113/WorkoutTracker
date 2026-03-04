@@ -1,0 +1,39 @@
+{
+  "name": "homegym-fullstack",
+  "version": "1.0.0",
+  "private": true,
+  "description": "HomeGym full-stack app (React + Express + MongoDB)",
+  "scripts": {
+    "dev:server": "nodemon server/index.js",
+    "dev:client": "webpack serve --config client/webpack.config.js --mode development",
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:client\"",
+    "build": "webpack --config client/webpack.config.js --mode production",
+    "start": "node server/index.js"
+  },
+  "dependencies": {
+    "axios": "*",
+    "chart.js": "*",
+    "cors": "*",
+    "dayjs": "*",
+    "express": "*",
+    "mongodb": "*",
+    "react": "*",
+    "react-chartjs-2": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@babel/preset-env": "*",
+    "@babel/preset-react": "*",
+    "babel-loader": "*",
+    "concurrently": "*",
+    "css-loader": "*",
+    "html-webpack-plugin": "*",
+    "nodemon": "*",
+    "style-loader": "*",
+    "webpack": "*",
+    "webpack-cli": "*",
+    "webpack-dev-server": "*"
+  }
+}
+

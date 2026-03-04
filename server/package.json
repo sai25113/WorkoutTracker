@@ -1,0 +1,20 @@
+{
+  "name": "homegym-server",
+  "version": "1.0.0",
+  "description": "HomeGym API server (Express + MongoDB)",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  },
+  "dependencies": {
+    "cors": "*",
+    "dayjs": "*",
+    "express": "*",
+    "mongodb": "*"
+  },
+  "devDependencies": {
+    "nodemon": "*"
+  }
+}
+
