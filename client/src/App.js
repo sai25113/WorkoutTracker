@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import api from './api';
-import { Line } from 'react-chartjs-2';
+import React, { useEffect, useMemo, useState } from "react";
+import api from "./api";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
@@ -8,27 +8,34 @@ import {
   PointElement,
   LineElement,
   Tooltip,
-  Legend
-} from 'chart.js';
+  Legend,
+} from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Tooltip,
+  Legend,
+);
 
 const CATEGORIES = [
-  'Arms',
-  'Legs',
-  'Core',
-  'Back',
-  'Chest',
-  'Shoulders',
-  'Full Body'
+  "Arms",
+  "Legs",
+  "Core",
+  "Back",
+  "Chest",
+  "Shoulders",
+  "Full Body",
 ];
 
-const EQUIPMENT = ['Dumbbells', 'Bands', 'Mat', 'Bodyweight'];
+const EQUIPMENT = ["Dumbbells", "Bands", "Mat", "Bodyweight"];
 
 function TabButton({ active, onClick, children }) {
   return (
     <button
-      className={`tab-button ${active ? 'active' : ''}`}
+      className={`tab-button ${active ? "active" : ""}`}
       type="button"
       onClick={onClick}
     >
@@ -39,15 +46,15 @@ function TabButton({ active, onClick, children }) {
 
 function ExerciseForm({ onCreated }) {
   const [form, setForm] = useState({
-    name: '',
-    category: 'Arms',
-    equipment: 'Dumbbells',
-    instructions: '',
-    breathing: ''
+    name: "",
+    category: "Arms",
+    equipment: "Dumbbells",
+    instructions: "",
+    breathing: "",
   });
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,27 +63,27 @@ function ExerciseForm({ onCreated }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!form.name || !form.instructions || !form.breathing) {
-      setError('Please fill out name, instructions, and breathing.');
+      setError("Please fill out name, instructions, and breathing.");
       return;
     }
 
     try {
       setLoading(true);
-      const res = await api.post('/exercises', form);
+      const res = await api.post("/exercises", form);
       onCreated(res.data);
       setForm({
-        name: '',
-        category: 'Arms',
-        equipment: 'Dumbbells',
-        instructions: '',
-        breathing: ''
+        name: "",
+        category: "Arms",
+        equipment: "Dumbbells",
+        instructions: "",
+        breathing: "",
       });
     } catch (err) {
       console.error(err);
-      setError('Failed to save exercise.');
+      setError("Failed to save exercise.");
     } finally {
       setLoading(false);
     }
@@ -101,11 +108,7 @@ function ExerciseForm({ onCreated }) {
       <div className="form-row two-col">
         <label>
           Category
-          <select
-            name="category"
-            value={form.category}
-            onChange={handleChange}
-          >
+          <select name="category" value={form.category} onChange={handleChange}>
             {CATEGORIES.map((c) => (
               <option key={c} value={c}>
                 {c}
@@ -153,13 +156,19 @@ function ExerciseForm({ onCreated }) {
         </label>
       </div>
       <button className="primary" type="submit" disabled={loading}>
-        {loading ? 'Saving...' : 'Save Exercise'}
+        {loading ? "Saving..." : "Save Exercise"}
       </button>
     </form>
   );
 }
 
-function ExerciseList({ exercises, onSelect, selectedId, filters, setFilters }) {
+function ExerciseList({
+  exercises,
+  onSelect,
+  selectedId,
+  filters,
+  setFilters,
+}) {
   const filtered = useMemo(() => {
     return exercises.filter((ex) => {
       if (filters.category && ex.category !== filters.category) return false;
@@ -220,10 +229,10 @@ function ExerciseList({ exercises, onSelect, selectedId, filters, setFilters }) 
         )}
         {filtered.map((ex) => (
           <button
-            key={ex.id}
+            key={ex._id}
             type="button"
             className={`exercise-item ${
-              selectedId === ex.id ? 'selected' : ''
+              selectedId === ex._id ? "selected" : ""
             }`}
             onClick={() => onSelect(ex)}
           >
@@ -244,13 +253,13 @@ function ExerciseList({ exercises, onSelect, selectedId, filters, setFilters }) 
 function WorkoutLogForm({ exercises, onLogged }) {
   const [form, setForm] = useState({
     date: new Date().toISOString().slice(0, 10),
-    exercise_id: '',
-    reps: '',
-    weight: '',
-    rpe: '',
-    notes: ''
+    exercise_id: "",
+    reps: "",
+    weight: "",
+    rpe: "",
+    notes: "",
   });
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
@@ -260,10 +269,10 @@ function WorkoutLogForm({ exercises, onLogged }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (!form.date || !form.exercise_id || !form.reps) {
-      setError('Please select exercise, date, and reps.');
+      setError("Please select exercise, date, and reps.");
       return;
     }
 
@@ -271,24 +280,24 @@ function WorkoutLogForm({ exercises, onLogged }) {
       setLoading(true);
       const payload = {
         date: form.date,
-        exercise_id: Number(form.exercise_id),
+        exercise_id: form.exercise_id,
         reps: Number(form.reps),
         weight: form.weight ? Number(form.weight) : null,
         rpe: form.rpe ? Number(form.rpe) : null,
-        notes: form.notes || null
+        notes: form.notes || null,
       };
-      const res = await api.post('/logs', payload);
+      const res = await api.post("/logs", payload);
       onLogged(res.data);
       setForm((prev) => ({
         ...prev,
-        reps: '',
-        weight: '',
-        rpe: '',
-        notes: ''
+        reps: "",
+        weight: "",
+        rpe: "",
+        notes: "",
       }));
     } catch (err) {
       console.error(err);
-      setError('Failed to save workout log.');
+      setError("Failed to save workout log.");
     } finally {
       setLoading(false);
     }
@@ -317,7 +326,7 @@ function WorkoutLogForm({ exercises, onLogged }) {
           >
             <option value="">Select exercise</option>
             {exercises.map((ex) => (
-              <option key={ex.id} value={ex.id}>
+              <option key={ex._id} value={ex._id}>
                 {ex.name}
               </option>
             ))}
@@ -371,17 +380,17 @@ function WorkoutLogForm({ exercises, onLogged }) {
         </label>
       </div>
       <button className="primary" type="submit" disabled={loading}>
-        {loading ? 'Logging...' : 'Log Set'}
+        {loading ? "Logging..." : "Log Set"}
       </button>
     </form>
   );
 }
 
 function AnalyticsView({ exercises }) {
-  const [period, setPeriod] = useState('today');
+  const [period, setPeriod] = useState("today");
   const [summary, setSummary] = useState(null);
   const [loadingSummary, setLoadingSummary] = useState(false);
-  const [selectedExerciseId, setSelectedExerciseId] = useState('');
+  const [selectedExerciseId, setSelectedExerciseId] = useState("");
   const [progression, setProgression] = useState([]);
   const [loadingProg, setLoadingProg] = useState(false);
 
@@ -389,8 +398,8 @@ function AnalyticsView({ exercises }) {
     const fetchSummary = async () => {
       try {
         setLoadingSummary(true);
-        const res = await api.get('/analytics/summary', {
-          params: { period }
+        const res = await api.get("/analytics/summary", {
+          params: { period },
         });
         setSummary(res.data);
       } catch (err) {
@@ -411,7 +420,7 @@ function AnalyticsView({ exercises }) {
       try {
         setLoadingProg(true);
         const res = await api.get(
-          `/analytics/progression/${selectedExerciseId}`
+          `/analytics/progression/${selectedExerciseId}`,
         );
         setProgression(res.data);
       } catch (err) {
@@ -432,18 +441,18 @@ function AnalyticsView({ exercises }) {
       labels,
       datasets: [
         {
-          label: 'Total Reps',
+          label: "Total Reps",
           data: repsData,
-          borderColor: '#4f46e5',
-          backgroundColor: 'rgba(79, 70, 229, 0.2)'
+          borderColor: "#4f46e5",
+          backgroundColor: "rgba(79, 70, 229, 0.2)",
         },
         {
-          label: 'Max Weight (kg)',
+          label: "Max Weight (kg)",
           data: weightData,
-          borderColor: '#16a34a',
-          backgroundColor: 'rgba(22, 163, 74, 0.2)'
-        }
-      ]
+          borderColor: "#16a34a",
+          backgroundColor: "rgba(22, 163, 74, 0.2)",
+        },
+      ],
     };
   }, [progression]);
 
@@ -452,14 +461,18 @@ function AnalyticsView({ exercises }) {
       <h2>Analytics</h2>
       <div className="analytics-top">
         <div className="period-toggle">
-          {['today', 'week', 'month'].map((p) => (
+          {["today", "week", "month"].map((p) => (
             <button
               key={p}
               type="button"
-              className={period === p ? 'chip active' : 'chip'}
+              className={period === p ? "chip active" : "chip"}
               onClick={() => setPeriod(p)}
             >
-              {p === 'today' ? 'Today' : p === 'week' ? 'Last 7 days' : 'Last 30 days'}
+              {p === "today"
+                ? "Today"
+                : p === "week"
+                  ? "Last 7 days"
+                  : "Last 30 days"}
             </button>
           ))}
         </div>
@@ -506,7 +519,7 @@ function AnalyticsView({ exercises }) {
             >
               <option value="">Select exercise</option>
               {exercises.map((ex) => (
-                <option key={ex.id} value={ex.id}>
+                <option key={ex._id} value={ex._id}>
                   {ex.name}
                 </option>
               ))}
@@ -530,9 +543,9 @@ function AnalyticsView({ exercises }) {
                 maintainAspectRatio: false,
                 plugins: {
                   legend: {
-                    position: 'top'
-                  }
-                }
+                    position: "top",
+                  },
+                },
               }}
             />
           </div>
@@ -548,7 +561,7 @@ function TemplatesPanel() {
   useEffect(() => {
     const fetchTemplates = async () => {
       try {
-        const res = await api.get('/templates');
+        const res = await api.get("/templates");
         setTemplates(res.data);
       } catch (err) {
         console.error(err);
@@ -561,12 +574,12 @@ function TemplatesPanel() {
     <div className="card">
       <h2>Quick Start Plans</h2>
       <p className="muted small">
-        Use these as inspiration with your current exercise list. Tap into dumbbells,
-        bands, and your mat without needing a full gym.
+        Use these as inspiration with your current exercise list. Tap into
+        dumbbells, bands, and your mat without needing a full gym.
       </p>
       <div className="templates-grid">
         {templates.map((tpl) => (
-          <div key={tpl.id} className="template-card">
+          <div key={tpl._id} className="template-card">
             <div className="template-title">{tpl.name}</div>
             <div className="template-focus">{tpl.focus}</div>
             <p className="template-description">{tpl.description}</p>
@@ -586,17 +599,17 @@ function App() {
   const [exercises, setExercises] = useState([]);
   const [logs, setLogs] = useState([]);
   const [filters, setFilters] = useState({
-    category: '',
-    equipment: '',
-    search: ''
+    category: "",
+    equipment: "",
+    search: "",
   });
   const [selectedExercise, setSelectedExercise] = useState(null);
-  const [activeTab, setActiveTab] = useState('train');
+  const [activeTab, setActiveTab] = useState("train");
 
   useEffect(() => {
     const fetchExercises = async () => {
       try {
-        const res = await api.get('/exercises');
+        const res = await api.get("/exercises");
         setExercises(res.data);
       } catch (err) {
         console.error(err);
@@ -604,7 +617,7 @@ function App() {
     };
     const fetchLogs = async () => {
       try {
-        const res = await api.get('/logs');
+        const res = await api.get("/logs");
         setLogs(res.data);
       } catch (err) {
         console.error(err);
@@ -635,39 +648,39 @@ function App() {
         </div>
         <nav className="tabs">
           <TabButton
-            active={activeTab === 'train'}
-            onClick={() => setActiveTab('train')}
+            active={activeTab === "train"}
+            onClick={() => setActiveTab("train")}
           >
             Train
           </TabButton>
           <TabButton
-            active={activeTab === 'manage'}
-            onClick={() => setActiveTab('manage')}
+            active={activeTab === "manage"}
+            onClick={() => setActiveTab("manage")}
           >
             Exercises
           </TabButton>
           <TabButton
-            active={activeTab === 'insights'}
-            onClick={() => setActiveTab('insights')}
+            active={activeTab === "insights"}
+            onClick={() => setActiveTab("insights")}
           >
             Insights
           </TabButton>
         </nav>
       </header>
       <main className="app-main">
-        {activeTab === 'manage' && (
+        {activeTab === "manage" && (
           <div className="layout-grid">
             <ExerciseForm onCreated={handleExerciseCreated} />
             <ExerciseList
               exercises={exercises}
-              selectedId={selectedExercise?.id || null}
+              selectedId={selectedExercise?._id || null}
               onSelect={setSelectedExercise}
               filters={filters}
               setFilters={setFilters}
             />
           </div>
         )}
-        {activeTab === 'train' && (
+        {activeTab === "train" && (
           <div className="layout-grid">
             <WorkoutLogForm exercises={exercises} onLogged={handleLogCreated} />
             <div className="card">
@@ -677,7 +690,7 @@ function App() {
               )}
               <ul className="logs-list">
                 {recentLogs.map((log) => (
-                  <li key={log.id} className="log-item">
+                  <li key={log._id} className="log-item">
                     <div className="log-header">
                       <span className="log-exercise">{log.exercise_name}</span>
                       <span className="log-date">{log.date}</span>
@@ -698,7 +711,7 @@ function App() {
             </div>
           </div>
         )}
-        {activeTab === 'insights' && (
+        {activeTab === "insights" && (
           <div className="layout-grid">
             <AnalyticsView exercises={exercises} />
             <TemplatesPanel />
@@ -710,4 +723,3 @@ function App() {
 }
 
 export default App;
-
